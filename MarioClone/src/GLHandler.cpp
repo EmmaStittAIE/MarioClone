@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include "InitGL.h"
+#include "GLHandler.h"
 
-bool Init(SDL_Window*& window)
+bool GLHandler::Init(SDL_Window*& window)
 {
     SDL_Init(SDL_INIT_EVERYTHING); // may be worth looking into SDL_Init a bit further in future, to see if theres a reason to init certain things in sequence rather than all together
     SetGLAttributes(4, 6, 1);
@@ -30,7 +30,15 @@ bool Init(SDL_Window*& window)
     return true;
 }
 
-void SetGLAttributes(int glMajorVersion, int glMinorVersion, int useDoubleBuffering)
+void GLHandler::Destroy(SDL_Window*& window)
+{
+    SDL_GL_DeleteContext(window);
+    SDL_DestroyWindow(window);
+
+    SDL_Quit();
+}
+
+void GLHandler::SetGLAttributes(int glMajorVersion, int glMinorVersion, int useDoubleBuffering)
 {
     // disable deprecated functions
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
