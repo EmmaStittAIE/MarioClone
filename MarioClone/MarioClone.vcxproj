@@ -143,11 +143,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\InitGL.h" />
+    <ClInclude Include="src\GLHandler.h" />
     <ClInclude Include="src\Main.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\InitGL.cpp" />
+    <ClCompile Include="src\GLHandler.cpp" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
