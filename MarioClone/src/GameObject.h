@@ -2,10 +2,10 @@
 
 #include <vector>
 
-class Sprite
+class GameObject
 {
 public:
     std::vector<double> backgroundColour;
-    Sprite();
+    GameObject();
 };
 
