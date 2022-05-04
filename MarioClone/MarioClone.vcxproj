@@ -143,10 +143,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="src\GLHandler.h" />
     <ClInclude Include="src\Main.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="src\GLHandler.cpp" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
