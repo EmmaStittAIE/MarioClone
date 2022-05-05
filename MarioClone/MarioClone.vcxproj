@@ -141,6 +141,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="src\shaders\frag\FragmentShader.frag" />
+    <None Include="src\shaders\vert\VertexShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GameObject.h" />
