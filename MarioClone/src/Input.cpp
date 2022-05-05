@@ -47,9 +47,18 @@ void Input::HandleInput()
 
     if (keyboardState[SDL_SCANCODE_SPACE])
     {
-        object.backgroundColour[0] = 0;
-        object.backgroundColour[1] = 0;
-        object.backgroundColour[2] = 0;
+        if (keyboardState[SDL_SCANCODE_LCTRL])
+        {
+            object.backgroundColour[0] = 1;
+            object.backgroundColour[1] = 1;
+            object.backgroundColour[2] = 1;
+        }
+        else
+        {
+            object.backgroundColour[0] = 0;
+            object.backgroundColour[1] = 0;
+            object.backgroundColour[2] = 0;
+        }
     }
 
     if (object.backgroundColour[0] > 1) { object.backgroundColour[0] = 1; }
