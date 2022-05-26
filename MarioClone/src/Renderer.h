@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "raylib.h"
+#include "Sprite.h"
 
 class Renderer
 {
@@ -15,5 +16,7 @@ private:
     Texture enemySpritesheet;
     Texture itemSpritesheet;
     Texture terrainSpritesheet;
+
+    Sprite playerSprite;
 };
 
