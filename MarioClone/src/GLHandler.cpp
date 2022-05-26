@@ -6,7 +6,7 @@ bool GLHandler::Init(SDL_Window*& window)
 {
     SDL_Init(SDL_INIT_EVERYTHING); // may be worth looking into SDL_Init a bit further in future, to see if theres a reason to init certain things in sequence rather than all together
     SetGLAttributes(3, 3, 1);
-    window = SDL_CreateWindow("Hi hi~", 500, 200, 800, 800, SDL_WINDOW_OPENGL); // window tags also seem interesting to look into
+    window = SDL_CreateWindow("Hi hi~", 500, 200, 800, 600, SDL_WINDOW_OPENGL); // window tags also seem interesting to look into
     // SDL_CreateWindow returns null if something goes wrong, so if the window is null we know something went wrong and have to abort
     // we return a false bool value here to tell the user that something failed and initialisation did not complete successfully
     if (window == NULL)
