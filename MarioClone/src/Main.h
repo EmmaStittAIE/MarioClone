@@ -1,7 +1,3 @@
 #pragma once
-
-#include "GLHandler.h"
-#include "GameObject.h"
-#include "Input.h"
-#include "SpriteRenderer.h"
-#include "ResourceManager.h"
+#include "raylib.h"
+#include "Game.h"
