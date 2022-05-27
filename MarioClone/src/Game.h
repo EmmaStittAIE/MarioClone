@@ -4,7 +4,8 @@
 #include <chrono>
 
 #include "raylib.h"
-#include "Renderer.h"
+#include "Spritesheets.h"
+#include "Entity.h"
 
 class Game
 {
@@ -15,8 +16,8 @@ public:
     void EndGame();
 
 private:
-    Renderer renderer;
-    Texture2D spritesheets[10];
+    Spritesheets spritesheets;
+    Entity entity;
     Camera2D camera;
 
     // timing

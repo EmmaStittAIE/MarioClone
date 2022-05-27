@@ -5,7 +5,7 @@ int main()
     Game game;
 
     InitWindow(1024, 960, "I love resetting an entire project TvT");
-    SetWindowState(FLAG_WINDOW_UNDECORATED);
+    //InitWindow(1920, 1080, "I love resetting an entire project TvT");
 
     game.InitGame();
 
