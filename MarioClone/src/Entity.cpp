@@ -5,10 +5,10 @@ void Entity::PhysicsUpdate(float delta)
     if (position.x <= 0 || position.x >= GetScreenWidth() - 64) { velocity.x = 0; }
     if (velocity.x > 0.4 || velocity.x < -0.4)
     {
-        if (((velocity.x > 0 && !sprite.GetFacingRight()) || (velocity.x < 0 && sprite.GetFacingRight())) && sprite.GetCurrentAnimIndex() != 2) { sprite.SetAnimation(2); }
+        if ((velocity.x > 0 && !sprite.GetFacingRight()) || (velocity.x < 0 && sprite.GetFacingRight())) { sprite.SetAnimation(2); }
         else if (sprite.GetCurrentAnimIndex() != 1) { sprite.SetAnimation(1); }
     }
-    else if (sprite.GetCurrentAnimIndex() != 0) { sprite.SetAnimation(0); }
+    else { sprite.SetAnimation(0); }
 
     running = false;
 
@@ -30,7 +30,7 @@ void Entity::PhysicsUpdate(float delta)
     if (position.y >= GetScreenHeight() - 64) { onFloor = true; }
 
     if (onFloor) { velocity.y = std::min(velocity.y, 0.0f); }
-    else if (sprite.GetCurrentAnimIndex() != 3) { sprite.SetAnimation(3); }
+    else { sprite.SetAnimation(3); }
 
     position = Vector2Add(velocity, position);
 

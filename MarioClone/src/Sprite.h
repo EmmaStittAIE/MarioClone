@@ -33,10 +33,10 @@ public:
     void AdvanceAnimation(float delta);
     void DrawSprite();
 
-    void SetAnimation(int index) { currentAnim->currentFrame = 0; currentAnim = &animations[index]; }
+    void SetAnimation(int index) { framesPassed = 0; currentAnim->currentFrame = 0; currentAnim = &animations[index]; currentAnimIndex = index; }
     void SetFacingRight(bool right) { facingRight = right; }
 
-    int GetCurrentAnimIndex() { return (currentAnim - animations) / sizeof(Animation); }
+    int GetCurrentAnimIndex() { return currentAnimIndex; }
     bool GetFacingRight() { return facingRight; }
 
 private:
@@ -48,6 +48,8 @@ private:
     Texture colouredTexture;
 
     Animation* currentAnim = nullptr;
+    int currentAnimIndex = 0;
+
     Animation animIdle = { 0, 1, 0, 0, 0, {{0, 0, 16, 16}} };
     Animation animWalk = { 0, 3, 0, 1, 0, {{16, 0, 16, 16}, {32, 0, 16, 16}, {48, 0, 16, 16}} };
     Animation animSkid = { 0, 1, 0, 0, 0, {{64, 0, 16, 16}} };
