@@ -10,18 +10,21 @@
 class Game
 {
 public:
+    Game();
     void InitGame();
     void Update();
     void Draw();
+    void Collisions();
     void EndGame();
 
 private:
     Spritesheets spritesheets;
-    Entity entity;
+    Hitbox hitbox; // remove later
+    Hitbox hitbox2; // remove later
+    Entity entity; // remove later
     Camera2D camera;
 
     // timing
-    //std::chrono::steady_clock clock;
     std::clock_t currentTime;
     std::clock_t previousTime;
     float timer = 0;

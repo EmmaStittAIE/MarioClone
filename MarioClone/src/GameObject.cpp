@@ -1,6 +1,7 @@
 #include "GameObject.h"
 
-void GameObject::Init(Texture* spritesheetPointer)
+GameObject::GameObject(Texture* spritesheetPointer, Rectangle hitboxRect)
+    : hitbox{ hitboxRect, this }
 {
     sprite.SetParent(this);
     sprite.SetSpritesheet(spritesheetPointer);

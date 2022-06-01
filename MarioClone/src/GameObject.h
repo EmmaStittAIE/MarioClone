@@ -2,13 +2,15 @@
 
 #include "Exceptions.h"
 #include "Sprite.h"
+#include "Hitbox.h"
 
 class GameObject
 {
 public:
+    Hitbox hitbox;
     Sprite sprite;
 
-    void Init(Texture* spritesheetPointer);
+    GameObject(Texture* spritesheetPointer, Rectangle hitboxRect);
 
     void PUpdate(float delta);
     void RUpdate(float delta);

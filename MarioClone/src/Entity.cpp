@@ -2,7 +2,8 @@
 
 void Entity::PhysicsUpdate(float delta)
 {
-    if (position.x <= 0 || position.x >= GetScreenWidth() - 64) { velocity.x = 0; }
+    previousPos = position;
+
     if (velocity.x > 0.4 || velocity.x < -0.4)
     {
         if ((velocity.x > 0 && !sprite.GetFacingRight()) || (velocity.x < 0 && sprite.GetFacingRight())) { sprite.SetAnimation(2); }
@@ -21,26 +22,33 @@ void Entity::PhysicsUpdate(float delta)
     if (velocity.x > 0.4 || velocity.x < -0.4) { AddForce((velocity.x > 0) ? -friction : friction, 0, delta); }
     else { velocity.x = 0; }
 
-    onFloor = false;
     // clamp to max speed
     Vector2 maxSpeed = running ? maxRunSpeed : maxWalkSpeed;
     velocity = { Clamp(velocity.x, -maxSpeed.x, maxSpeed.x),
                  Clamp(velocity.y, -INFINITY, maxSpeed.y) };
     
-    if (position.y >= GetScreenHeight() - 64) { onFloor = true; }
+    if (!onFloor) { sprite.SetAnimation(3); }
 
-    if (onFloor) { velocity.y = std::min(velocity.y, 0.0f); }
-    else { sprite.SetAnimation(3); }
+    Move(velocity);
 
-    position = Vector2Add(velocity, position);
+    onFloor = false;
+}
 
-    position = { Clamp(position.x, 0, GetScreenWidth() - 64),
-                 Clamp(position.y, 0, GetScreenHeight() - 64) };
+Entity::Entity(Texture* spritesheetPointer, Rectangle hitboxRect)
+    : GameObject(spritesheetPointer, hitboxRect)
+{
 }
 
 void Entity::Move(Vector2 translation)
 {
     position = Vector2Add(position, translation);
+    hitbox.SetPos(position);
+}
+
+void Entity::SetPos(Vector2 pos)
+{
+    position = pos;
+    hitbox.SetPos(position);
 }
 
 void Entity::AddForce(Vector2 force, float delta)
@@ -68,4 +76,28 @@ void Entity::HandleInput(float delta)
     {
         running = true;
     }
+}
+
+void Entity::HandleCollision(Hitbox collision, Sides entitySides)
+{
+    if ((entitySides & Sides::bottom) == Sides::bottom)
+    {
+        SetPos(position.x, collision.GetTop() - hitbox.GetHeight());
+        velocity.y = 0;
+        onFloor = true;
+    }
+
+    entitySides = hitbox.GetSidesColliding(collision);
+    if ((entitySides & Sides::left) == Sides::left)
+    {
+        SetPos(collision.GetRight(), position.y);
+        velocity.x = 0; 
+    }
+    else if ((entitySides & Sides::right) == Sides::right)
+    {
+        SetPos(collision.GetLeft() - hitbox.GetWidth(), position.y);
+        velocity.x = 0;
+    }
+    
+    
 }
