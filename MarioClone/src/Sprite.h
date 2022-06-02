@@ -2,9 +2,11 @@
 
 #include <algorithm>
 
-#include "raylib.h"
-#include "raymath.h"
+#include <raylib.h>
+#include <raymath.h>
+
 #include "Exceptions.h"
+#include "Node.h"
 
 struct Animation
 {
@@ -24,13 +26,11 @@ struct Palette
     Color fourth;
 };
 
-class Sprite
+class Sprite : public Node
 {
 public:
-    Sprite();
-    void SetParent(class GameObject* parentPointer);
-    void SetSpritesheet(Texture* spritesheetPointer);
-    void AdvanceAnimation(float delta);
+    Sprite(Game* gamePointer, class Texture* spritesheetPointer, class GameObject* parentPointer);
+    void AdvanceAnimation();
     void DrawSprite();
 
     void SetAnimation(int index) { framesPassed = 0; currentAnim->currentFrame = 0; currentAnim = &animations[index]; currentAnimIndex = index; }
@@ -39,9 +39,10 @@ public:
     int GetCurrentAnimIndex() { return currentAnimIndex; }
     bool GetFacingRight() { return facingRight; }
 
-private:
-    class GameObject* parent = nullptr;
+protected:
+    void RenderingUpdate() override;
 
+private:
     Texture* spritesheet = nullptr;
 
     Image colouredImage;

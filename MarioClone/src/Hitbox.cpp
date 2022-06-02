@@ -1,9 +1,7 @@
 #include "Hitbox.h"
-#include "GameObject.h"
 
-
-
-Hitbox::Hitbox(Rectangle rect, GameObject* parentPointer)
+Hitbox::Hitbox(Game* gamePointer, Rectangle rect, Node* parentPointer)
+    : Node(gamePointer)
 {
     topLeft = { rect.x, rect.y };
     bottomRight = Vector2Add(topLeft, { rect.width, rect.height });
@@ -11,18 +9,12 @@ Hitbox::Hitbox(Rectangle rect, GameObject* parentPointer)
     parent = parentPointer;
 }
 
-bool Hitbox::CheckCollision(Hitbox other, Sides* sidesOut)
+bool Hitbox::CheckCollision(Hitbox other)
 {
-    if (GetLeft() < other.GetRight() &&
-        GetRight() > other.GetLeft() &&
-        GetTop() < other.GetBottom() &&
-        GetBottom() > other.GetTop())
-    {
-        *sidesOut = GetSidesColliding(other);
-        return true;
-    }
-    *sidesOut = static_cast<Sides>(0);
-    return false;
+    return GetLeft() < other.GetRight() &&
+           GetRight() > other.GetLeft() &&
+           GetTop() < other.GetBottom() &&
+           GetBottom() > other.GetTop();
 }
 
 Sides Hitbox::GetSidesColliding(Hitbox other)

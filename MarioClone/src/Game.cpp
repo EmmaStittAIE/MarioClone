@@ -1,71 +1,191 @@
 #include "Game.h"
 
+// timekeeping code courtesy of https://stackoverflow.com/a/59446610
+
 Game::Game()
-    : entity{ &spritesheets.playerSpritesheet, {0, 0, 64, 64} },
-      hitbox{ {0.0f, 800.0f, 600.0f, 1000.0f} },
-      hitbox2{ {610.0f, 600.0f, 700.0f, 1000.0f} }
-{}
+{
+    for (int i = 0; i < maxNumOfNodes; i++)
+    {
+        nodes[i] = nullptr;
+    }
+
+    (new Hitbox(this, { 0.0f, 800.0f, 600.0f, 1000.0f }))->SetDebugColour({ 0, 255, 0, 120 });
+    (new Hitbox(this, { 610.0f, 600.0f, 700.0f, 1000.0f }))->SetDebugColour({ 0, 255, 0, 120 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    /*new Entity(this, nullptr, &spritesheets.playerSpritesheet, {0, 0, 64, 64});
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });*/
+}
 
 void Game::InitGame()
 {
     spritesheets.InitSpritesheets();
-
-    previousTime = std::clock();
+    
     SetTargetFPS(60);
+
+    previousTime = Clock::now();
+    accumulator = 0s;
 }
 
 void Game::Update()
 {
-    currentTime = std::clock();
-    deltaTime = (currentTime - previousTime) / 1000.0f;
-    timer += deltaTime;
-    if (timer >= 1.0f)
-    {
-        fps = frames;
-        frames = 0;
-        timer -= 1;
-    }
-    
-    // do stuff here
-    entity.PUpdate(deltaTime);
-    Collisions();
+    currentTime = Clock::now();
+    auto frameTime = currentTime - previousTime;
 
-    frames++;
+    if (frameTime > 250ms) { frameTime = 250ms; }
+
+    accumulator += frameTime;
+
+    while (accumulator > dt)
+    {
+        float deltaTime = dt/1s;
+
+        // do stuff here
+        for (int i = 0; i < numOfNodes; i++)
+        {
+            nodes[i]->PUpdate(deltaTime);
+        }
+        Collisions();
+        // end of stuff
+
+        accumulator -= dt;
+        t += dt;
+    }
     previousTime = currentTime;
 }
 
 void Game::Draw()
 {
-    entity.RUpdate(deltaTime);
+    for (int i = 0; i < numOfNodes; i++)
+    {
+        nodes[i]->RUpdate();
+    }
 
     BeginDrawing();
     ClearBackground(BLUE);
     
-    DrawText(std::to_string(fps).c_str(), 10, 10, 14, RED);
+    DrawText(std::to_string(GetFPS()).c_str(), 10, 10, 14, RED);
 
-    //spritesheets.DrawSprite();
-    entity.sprite.DrawSprite();
+    // draw all nodes
+    for (int i = 0; i < numOfNodes; i++)
+    {
+        // draw sprites
+        Sprite* s = dynamic_cast<Sprite*>(nodes[i]);
+        if (s != nullptr) { s->DrawSprite(); }
 
-    DrawRectangle(entity.hitbox.GetLeft(), entity.hitbox.GetTop(), entity.hitbox.GetWidth(), entity.hitbox.GetHeight(), { 255, 0, 0, 100 });
-    DrawRectangle(hitbox.GetLeft(), hitbox.GetTop(), hitbox.GetWidth(), hitbox.GetHeight(), { 0, 255, 0, 100 });
-    DrawRectangle(hitbox2.GetLeft(), hitbox2.GetTop(), hitbox2.GetWidth(), hitbox2.GetHeight(), {0, 255, 0, 100});
+        // draw hitboxes
+        Hitbox* hb = dynamic_cast<Hitbox*>(nodes[i]);
+        if (hb != nullptr)
+        {
+            DrawRectangle(hb->GetLeft(), hb->GetTop(), hb->GetWidth(), hb->GetHeight(), hb->GetDebugColour());
+        }
+    }
 
     EndDrawing();
 }
 
 void Game::Collisions()
 {
-    Sides sidesHit = static_cast<Sides>(0);
-    if (entity.hitbox.CheckCollision(hitbox, &sidesHit))
+    // we don't want all nodes to be in the collision step, because, aside from being inefficient, things would break when checking nodes that
+    // don't have hitboxes, such as sprites.
+    // since hitboxes are aware of their parents, so to speak, we can just compare all of the hitboxes, and if two collide, we tell their parents
+    // that a collision has occurred, and they can figure out the rest from there.
+    Hitbox** hitboxes = new Hitbox*[numOfNodes];
+    int numOfHitboxes = 0;
+
+    for (int i = 0; i < numOfNodes; i++)
     {
-        entity.HandleCollision(hitbox, sidesHit);
+        // dynamic_cast returns a nullptr if it couldn't convert to our desired type - in practise, this means that anything that returns nullptr
+        // isn't a hitbox, and thus we skip it and move on to the next
+        hitboxes[numOfHitboxes] = dynamic_cast<Hitbox*>(nodes[i]);
+        if (hitboxes[numOfHitboxes] != nullptr) { numOfHitboxes++; }
     }
-    if (entity.hitbox.CheckCollision(hitbox2, &sidesHit))
+
+    // loop doesn't run until there are at least two hitboxes present - nothing to collide if there's only one, after all
+    for (int i = 0; i < numOfHitboxes - 1; i++)
     {
-        entity.HandleCollision(hitbox2, sidesHit);
+        for (int j = i + 1; j < numOfHitboxes; j++)
+        {
+            if(hitboxes[i]->CheckCollision(*hitboxes[j]))
+            {
+                if (hitboxes[i]->GetParent() != nullptr) { hitboxes[i]->GetParent()->HandleCollision(*hitboxes[i], *hitboxes[j]); }
+                if (hitboxes[j]->GetParent() != nullptr) { hitboxes[j]->GetParent()->HandleCollision(*hitboxes[j], *hitboxes[i]); }
+            }
+        }
     }
+
+    delete[] hitboxes;
 }
 
 void Game::EndGame()
 {
+}
+
+bool Game::AddNode(Node* node)
+{
+    if (node->IsInitialised())
+    {
+        std::cout << "Failed to add node - node already exists" << std::endl;
+        return false;
+    }
+
+    for (int i = 0; i < maxNumOfNodes; i++)
+    {
+        if (nodes[i] == nullptr)
+        {
+            nodes[i] = node;
+            node->InitNode(i);
+            numOfNodes++;
+
+            return true;
+        }
+    }
+
+    std::cout << "Failed to add node - array too small" << std::endl;
+    return false;
+}
+
+void Game::DeleteNode(int index)
+{
+    delete nodes[index];
+    nodes[index] = nullptr;
+
+    numOfNodes--;
+}
+
+void Game::ClearNodes()
+{
+    for (int i = 0; i < numOfNodes; i++)
+    {
+        delete nodes[i];
+        nodes[i] = nullptr;
+    }
+    numOfNodes = 0;
+}
+
+Game::~Game()
+{
+    delete[] nodes;
 }

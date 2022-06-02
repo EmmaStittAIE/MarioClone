@@ -146,6 +146,7 @@
     <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\Hitbox.h" />
     <ClInclude Include="src\Main.h" />
+    <ClInclude Include="src\Node.h" />
     <ClInclude Include="src\Spritesheets.h" />
     <ClInclude Include="src\Sprite.h" />
   </ItemGroup>
@@ -155,6 +156,7 @@
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Hitbox.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\Spritesheets.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
   </ItemGroup>

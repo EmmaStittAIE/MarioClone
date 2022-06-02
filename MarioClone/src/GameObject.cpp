@@ -1,21 +1,9 @@
 #include "GameObject.h"
 
-GameObject::GameObject(Texture* spritesheetPointer, Rectangle hitboxRect)
-    : hitbox{ hitboxRect, this }
+GameObject::GameObject(Game* gamePointer, Node* parentPointer, Texture* spritesheetPointer, Rectangle hitboxRect)
+    : Node(gamePointer)
 {
-    sprite.SetParent(this);
-    sprite.SetSpritesheet(spritesheetPointer);
-}
-
-void GameObject::PUpdate(float delta)
-{
-    // stuff to do for every object
-    PhysicsUpdate(delta);
-}
-
-void GameObject::RUpdate(float delta)
-{
-    // stuff to do for every object
-    sprite.AdvanceAnimation(delta);
-    RenderingUpdate(delta);
+    hitbox = new Hitbox{ gamePointer, hitboxRect, this };
+    hitbox->SetDebugColour({ 255, 0, 0, 120 });
+    sprite = new Sprite{ gamePointer, spritesheetPointer, this };
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <typeindex>
+
 #include <raylib.h>
 #include <raymath.h>
 
@@ -9,7 +11,7 @@
 class Entity : public GameObject
 {
 public:
-    Entity(Texture* spritesheetPointer, Rectangle hitboxRect);
+    Entity(Game* gamePointer, Node* parentPointer, Texture* spritesheetPointer, Rectangle hitboxRect);
 
     void Move(Vector2 translation);
     void Move(float x, float y) { Move({ x, y }); }
@@ -20,8 +22,11 @@ public:
     void AddForce(Vector2 force, float delta);
     void AddForce(float x, float y, float delta) { AddForce({ x, y }, delta); }
 
+    void SetForce(Vector2 force);
+    void SetForce(float x, float y) { SetForce({ x, y }); }
+
     void HandleInput(float delta);
-    void HandleCollision(Hitbox collision, Sides sides);
+    void HandleCollision(Hitbox& thisBox, Hitbox& collision) override;
 
     Vector2 GetVelocity() { return velocity; };
 

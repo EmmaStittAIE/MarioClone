@@ -4,6 +4,7 @@
 #include <raymath.h>
 
 #include "Exceptions.h"
+#include "Node.h"
 
 enum class Alignment
 {
@@ -38,19 +39,19 @@ inline Sides operator|=(Sides& lhs, Sides rhs)
     return lhs;
 }
 
-class Hitbox
+class Hitbox : public Node
 {
 public:
-    Hitbox(Rectangle rect, class GameObject* parentPointer);
-    Hitbox(Rectangle rect)
-        : Hitbox(rect, nullptr) {}
+    Hitbox(Game* gamePointer, Rectangle rect, Node* parentPointer);
+    Hitbox(Game* gamePointer, Rectangle rect)
+        : Hitbox(gamePointer, rect, nullptr) {}
     
-    Hitbox(Vector2 pos, Vector2 size, class GameObject* parent)
-        : Hitbox({ pos.x, pos.y, size.x, size.y }, parent) {}
-    Hitbox(Vector2 pos, Vector2 size)
-        : Hitbox({ pos.x, pos.y, size.x, size.y }, nullptr) {}
+    Hitbox(Game* gamePointer, Vector2 pos, Vector2 size, Node* parent)
+        : Hitbox(gamePointer, { pos.x, pos.y, size.x, size.y }, parent) {}
+    Hitbox(Game* gamePointer, Vector2 pos, Vector2 size)
+        : Hitbox(gamePointer, { pos.x, pos.y, size.x, size.y }, nullptr) {}
 
-    class GameObject* parent = nullptr;
+    Vector2 GetPos() override { return topLeft; }
 
     Vector2 GetTopLeft() { return topLeft; }
     Vector2 GetTopRight() { return { bottomRight.x, topLeft.y }; }
@@ -66,7 +67,7 @@ public:
     float GetTop() { return topLeft.y; }
     float GetBottom() { return bottomRight.y; }
 
-    bool CheckCollision(Hitbox other, Sides* sidesOut);
+    bool CheckCollision(Hitbox other);
     Sides GetSidesColliding(Hitbox other);
 
     void Move(Vector2 amount);
@@ -74,8 +75,13 @@ public:
 
     void SetScale(Vector2 newSize, Alignment align);
 
+    Color GetDebugColour() { return debugColour; }
+    void SetDebugColour(Color colour) { debugColour = colour; }
+
 private:
     Vector2 topLeft;
     Vector2 bottomRight;
+
+    Color debugColour = {255, 255, 255, 255};
 };
 

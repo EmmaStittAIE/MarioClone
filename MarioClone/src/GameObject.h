@@ -3,24 +3,14 @@
 #include "Exceptions.h"
 #include "Sprite.h"
 #include "Hitbox.h"
+#include "Node.h"
 
-class GameObject
+class GameObject : public Node
 {
 public:
-    Hitbox hitbox;
-    Sprite sprite;
+    Hitbox* hitbox;
+    Sprite* sprite;
 
-    GameObject(Texture* spritesheetPointer, Rectangle hitboxRect);
-
-    void PUpdate(float delta);
-    void RUpdate(float delta);
-
-    Vector2 GetPos() { return position; }
-
-protected:
-    virtual void PhysicsUpdate(float delta) { }
-    virtual void RenderingUpdate(float delta) { }
-
-    Vector2 position = {500, 500};
+    GameObject(Game* gamePointer, Node* parentPointer, Texture* spritesheetPointer, Rectangle hitboxRect);
 };
 
