@@ -44,36 +44,19 @@ void Game::InitGame()
     spritesheets.InitSpritesheets();
     
     SetTargetFPS(60);
-
-    previousTime = Clock::now();
-    accumulator = 0s;
 }
 
 void Game::Update()
 {
-    currentTime = Clock::now();
-    auto frameTime = currentTime - previousTime;
-
-    if (frameTime > 250ms) { frameTime = 250ms; }
-
-    accumulator += frameTime;
-
-    while (accumulator > dt)
+    // do stuff here
+    for (int i = 0; i < numOfNodes; i++)
     {
-        float deltaTime = dt/1s;
-
-        // do stuff here
-        for (int i = 0; i < numOfNodes; i++)
-        {
-            nodes[i]->PUpdate(deltaTime);
-        }
-        Collisions();
-        // end of stuff
-
-        accumulator -= dt;
-        t += dt;
+        nodes[i]->PUpdate(dt);
     }
-    previousTime = currentTime;
+    Collisions();
+    // end of stuff
+
+    t += dt;
 }
 
 void Game::Draw()
