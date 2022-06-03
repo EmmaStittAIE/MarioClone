@@ -5,7 +5,6 @@
 #include <string>
 #include <chrono>
 #include <mutex>
-#include <vector>
 
 #include <raylib.h>
 
