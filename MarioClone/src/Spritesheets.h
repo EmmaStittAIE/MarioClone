@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "raylib.h"
+#include <raylib.h>
 #include "Sprite.h"
 
 class Spritesheets

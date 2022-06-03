@@ -5,6 +5,7 @@
 #include <string>
 #include <chrono>
 #include <mutex>
+#include <vector>
 
 #include <raylib.h>
 
@@ -21,6 +22,8 @@ public:
     void Draw();
     void Collisions();
     void EndGame();
+
+    void GetHitboxes(Node* node, Hitbox**& hitboxesOut, int& numOfHitboxesOut);
 
     bool AddNode(Node* node);
     void DeleteNode(int index);
@@ -39,6 +42,9 @@ private:
     Camera2D camera;
 
     // timing
+    double accumulator = 0;
+    double frameTime = 0;
+
     double t = 0.0;
     const double dt = 1.0/60.0;
 };

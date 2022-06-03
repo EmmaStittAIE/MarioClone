@@ -11,7 +11,7 @@ Game::Game()
 
     (new Hitbox(this, { 0.0f, 800.0f, 600.0f, 1000.0f }))->SetDebugColour({ 0, 255, 0, 120 });
     (new Hitbox(this, { 610.0f, 600.0f, 700.0f, 1000.0f }))->SetDebugColour({ 0, 255, 0, 120 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
+    new Entity(this, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
     /*new Entity(this, nullptr, &spritesheets.playerSpritesheet, {0, 0, 64, 64});
     new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
     new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
@@ -48,15 +48,24 @@ void Game::InitGame()
 
 void Game::Update()
 {
-    // do stuff here
-    for (int i = 0; i < numOfNodes; i++)
-    {
-        nodes[i]->PUpdate(dt);
-    }
-    Collisions();
-    // end of stuff
+    frameTime = GetFrameTime();
+    if (frameTime > 0.25) { frameTime = 0.25; }
 
-    t += dt;
+    accumulator += frameTime;
+
+    while (accumulator >= dt)
+    {
+        // do stuff here
+        for (int i = 0; i < numOfNodes; i++)
+        {
+            nodes[i]->PUpdate(dt);
+        }
+        Collisions();
+        // end of stuff
+
+        t += dt;
+        accumulator -= dt;
+    }
 }
 
 void Game::Draw()
@@ -74,16 +83,7 @@ void Game::Draw()
     // draw all nodes
     for (int i = 0; i < numOfNodes; i++)
     {
-        // draw sprites
-        Sprite* s = dynamic_cast<Sprite*>(nodes[i]);
-        if (s != nullptr) { s->DrawSprite(); }
-
-        // draw hitboxes
-        Hitbox* hb = dynamic_cast<Hitbox*>(nodes[i]);
-        if (hb != nullptr)
-        {
-            DrawRectangle(hb->GetLeft(), hb->GetTop(), hb->GetWidth(), hb->GetHeight(), hb->GetDebugColour());
-        }
+        nodes[i]->DrawNode();
     }
 
     EndDrawing();
@@ -95,15 +95,12 @@ void Game::Collisions()
     // don't have hitboxes, such as sprites.
     // since hitboxes are aware of their parents, so to speak, we can just compare all of the hitboxes, and if two collide, we tell their parents
     // that a collision has occurred, and they can figure out the rest from there.
-    Hitbox** hitboxes = new Hitbox*[numOfNodes];
+    Hitbox** hitboxes = {};
     int numOfHitboxes = 0;
 
     for (int i = 0; i < numOfNodes; i++)
     {
-        // dynamic_cast returns a nullptr if it couldn't convert to our desired type - in practise, this means that anything that returns nullptr
-        // isn't a hitbox, and thus we skip it and move on to the next
-        hitboxes[numOfHitboxes] = dynamic_cast<Hitbox*>(nodes[i]);
-        if (hitboxes[numOfHitboxes] != nullptr) { numOfHitboxes++; }
+        GetHitboxes(nodes[i], hitboxes, numOfHitboxes);
     }
 
     // loop doesn't run until there are at least two hitboxes present - nothing to collide if there's only one, after all
@@ -124,6 +121,32 @@ void Game::Collisions()
 
 void Game::EndGame()
 {
+}
+
+void Game::GetHitboxes(Node* node, Hitbox**& hitboxesOut, int& numOfHitboxesOut)
+{
+    Hitbox** hitboxesTemp = new Hitbox * [numOfHitboxesOut + 1] {};
+    for (int i = 0; i < numOfHitboxesOut; i++)
+    {
+        hitboxesTemp[i] = hitboxesOut[i];
+    }
+
+    // dynamic_cast returns a nullptr if it couldn't convert to our desired type - in practise, this means that anything that returns nullptr
+    // isn't a hitbox, and thus we skip it and move on to the next
+    hitboxesTemp[numOfHitboxesOut] = dynamic_cast<Hitbox*>(node);
+    if (hitboxesTemp[numOfHitboxesOut] != nullptr) { numOfHitboxesOut++; }
+
+    for (int i = 0; i < node->GetNumOfChildren(); i++)
+    {
+        GetHitboxes(node->GetChildren()[i], hitboxesTemp, numOfHitboxesOut);
+    }
+
+    hitboxesOut = new Hitbox * [numOfHitboxesOut]{};
+    for (int i = 0; i < numOfHitboxesOut; i++)
+    {
+        hitboxesOut[i] = hitboxesTemp[i];
+    }
+    delete[] hitboxesTemp;
 }
 
 bool Game::AddNode(Node* node)

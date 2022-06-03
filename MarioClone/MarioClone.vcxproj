@@ -78,7 +78,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\s214263\SourceTree\MarioClone\MarioClone\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -147,6 +149,7 @@
     <ClInclude Include="src\Hitbox.h" />
     <ClInclude Include="src\Main.h" />
     <ClInclude Include="src\Node.h" />
+    <ClInclude Include="src\RaylibOperatorOverrides.h" />
     <ClInclude Include="src\Spritesheets.h" />
     <ClInclude Include="src\Sprite.h" />
   </ItemGroup>

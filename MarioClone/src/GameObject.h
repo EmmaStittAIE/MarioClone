@@ -11,6 +11,7 @@ public:
     Hitbox* hitbox;
     Sprite* sprite;
 
+    GameObject(Game* gamePointer, Texture* spritesheetPointer, Rectangle hitboxRect);
     GameObject(Game* gamePointer, Node* parentPointer, Texture* spritesheetPointer, Rectangle hitboxRect);
 };
 

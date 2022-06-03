@@ -2,6 +2,5 @@
 
 void Spritesheets::InitSpritesheets()
 {
-    Image image = LoadImage("assets/sprites/player/Player.png");
-    playerSpritesheet = LoadTextureFromImage(image);
+    playerSpritesheet = LoadTexture("assets/sprites/player/Player.png");
 }

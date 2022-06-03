@@ -1,8 +1,8 @@
 #pragma once
 
 #include <raylib.h>
-#include <raymath.h>
 
+#include "RaylibOperatorOverrides.h"
 #include "Exceptions.h"
 #include "Node.h"
 
@@ -42,14 +42,13 @@ inline Sides operator|=(Sides& lhs, Sides rhs)
 class Hitbox : public Node
 {
 public:
-    Hitbox(Game* gamePointer, Rectangle rect, Node* parentPointer);
-    Hitbox(Game* gamePointer, Rectangle rect)
-        : Hitbox(gamePointer, rect, nullptr) {}
+    Hitbox(Game* gamePointer, Rectangle rect);
+    Hitbox(Game* gamePointer, Node* parentPointer, Rectangle rect);
     
-    Hitbox(Game* gamePointer, Vector2 pos, Vector2 size, Node* parent)
-        : Hitbox(gamePointer, { pos.x, pos.y, size.x, size.y }, parent) {}
     Hitbox(Game* gamePointer, Vector2 pos, Vector2 size)
-        : Hitbox(gamePointer, { pos.x, pos.y, size.x, size.y }, nullptr) {}
+        : Hitbox(gamePointer, { pos.x, pos.y, size.x, size.y }) {}
+    Hitbox(Game* gamePointer, Node* parentPointer, Vector2 pos, Vector2 size)
+        : Hitbox(gamePointer, parentPointer, { pos.x, pos.y, size.x, size.y }) {}
 
     Vector2 GetPos() override { return topLeft; }
 
@@ -58,7 +57,7 @@ public:
     Vector2 GetBottomLeft() { return { topLeft.x, bottomRight.y }; }
     Vector2 GetBottomRight() { return bottomRight; }
 
-    Vector2 GetSize() { return Vector2Subtract(bottomRight, topLeft); }
+    Vector2 GetSize() { return bottomRight - topLeft; }
     float GetWidth() { return bottomRight.x - topLeft.x; }
     float GetHeight() { return bottomRight.y - topLeft.y; }
 
@@ -70,13 +69,15 @@ public:
     bool CheckCollision(Hitbox other);
     Sides GetSidesColliding(Hitbox other);
 
-    void Move(Vector2 amount);
-    void SetPos(Vector2 pos);
+    void Move(Vector2 amount) override;
+    void SetPos(Vector2 pos) override;
 
     void SetScale(Vector2 newSize, Alignment align);
 
     Color GetDebugColour() { return debugColour; }
     void SetDebugColour(Color colour) { debugColour = colour; }
+
+    void Draw() override;
 
 private:
     Vector2 topLeft;

@@ -34,26 +34,19 @@ void Entity::PhysicsUpdate(float delta)
     onFloor = false;
 }
 
+Entity::Entity(Game* gamePointer, Texture* spritesheetPointer, Rectangle hitboxRect)
+    : GameObject(gamePointer, spritesheetPointer, hitboxRect)
+{
+}
+
 Entity::Entity(Game* gamePointer, Node* parentPointer, Texture* spritesheetPointer, Rectangle hitboxRect)
     : GameObject(gamePointer, parentPointer, spritesheetPointer, hitboxRect)
 {
 }
 
-void Entity::Move(Vector2 translation)
-{
-    position = Vector2Add(position, translation);
-    hitbox->SetPos(position);
-}
-
-void Entity::SetPos(Vector2 pos)
-{
-    position = pos;
-    hitbox->SetPos(position);
-}
-
 void Entity::AddForce(Vector2 force, float delta)
 {
-    velocity = Vector2Add(velocity, Vector2Scale(force, delta));
+    velocity = velocity + (force * delta);
 }
 
 void Entity::SetForce(Vector2 force)

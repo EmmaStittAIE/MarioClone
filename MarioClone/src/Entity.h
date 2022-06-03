@@ -3,21 +3,16 @@
 #include <typeindex>
 
 #include <raylib.h>
-#include <raymath.h>
 
+#include "RaylibOperatorOverrides.h"
 #include "GameObject.h"
 #include "Hitbox.h"
 
 class Entity : public GameObject
 {
 public:
+    Entity(Game* gamePointer, Texture* spritesheetPointer, Rectangle hitboxRect);
     Entity(Game* gamePointer, Node* parentPointer, Texture* spritesheetPointer, Rectangle hitboxRect);
-
-    void Move(Vector2 translation);
-    void Move(float x, float y) { Move({ x, y }); }
-
-    void SetPos(Vector2 pos);
-    void SetPos(float x, float y) { SetPos({ x, y }); }
 
     void AddForce(Vector2 force, float delta);
     void AddForce(float x, float y, float delta) { AddForce({ x, y }, delta); }

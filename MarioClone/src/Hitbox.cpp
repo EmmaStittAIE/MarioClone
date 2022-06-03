@@ -1,12 +1,17 @@
 #include "Hitbox.h"
 
-Hitbox::Hitbox(Game* gamePointer, Rectangle rect, Node* parentPointer)
+Hitbox::Hitbox(Game* gamePointer, Rectangle rect)
     : Node(gamePointer)
 {
     topLeft = { rect.x, rect.y };
-    bottomRight = Vector2Add(topLeft, { rect.width, rect.height });
+    bottomRight = topLeft + Vector2{ rect.width, rect.height };
+}
 
-    parent = parentPointer;
+Hitbox::Hitbox(Game* gamePointer, Node* parentPointer, Rectangle rect)
+    : Node(gamePointer, parentPointer)
+{
+    topLeft = { rect.x, rect.y };
+    bottomRight = topLeft + Vector2{ rect.width, rect.height };
 }
 
 bool Hitbox::CheckCollision(Hitbox other)
@@ -30,15 +35,15 @@ Sides Hitbox::GetSidesColliding(Hitbox other)
 
 void Hitbox::Move(Vector2 amount)
 {
-    topLeft = Vector2Add(topLeft, amount);
-    bottomRight = Vector2Add(bottomRight, amount);
+    topLeft = topLeft + amount;
+    bottomRight = bottomRight + amount;
 }
 
 void Hitbox::SetPos(Vector2 pos)
 {
     Vector2 size = GetSize();
     topLeft = pos;
-    bottomRight = Vector2Add(pos, size);
+    bottomRight = pos + size;
 }
 
 void Hitbox::SetScale(Vector2 newSize, Alignment align)
@@ -46,7 +51,7 @@ void Hitbox::SetScale(Vector2 newSize, Alignment align)
     switch (align)
     {
     case Alignment::topLeft:
-        bottomRight = Vector2Add(topLeft, newSize);
+        bottomRight = topLeft + newSize;
         break;
 
     case Alignment::topRight:
@@ -60,15 +65,20 @@ void Hitbox::SetScale(Vector2 newSize, Alignment align)
         break;
 
     case Alignment::bottomRight:
-        topLeft = Vector2Subtract(bottomRight, newSize);
+        topLeft = bottomRight - newSize;
         break;
 
     case Alignment::centre:
-        topLeft = Vector2Add(topLeft, Vector2Scale(newSize, 0.5f));
+        topLeft = topLeft + newSize * 0.5f;
         break;
 
     default:
         throw ArgumentException("align");
         break;
     }
+}
+
+void Hitbox::Draw()
+{
+    DrawRectangle(GetLeft(), GetTop(), GetWidth(), GetHeight(), debugColour);
 }
