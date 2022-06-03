@@ -66,8 +66,15 @@ public:
     float GetTop() { return topLeft.y; }
     float GetBottom() { return bottomRight.y; }
 
+    float GetPrevLeft() { return prevTopLeft.x; }
+    float GetPrevRight() { return prevBottomRight.x; }
+    float GetPrevTop() { return prevTopLeft.y; }
+    float GetPrevBottom() { return prevBottomRight.y; }
+
     bool CheckCollision(Hitbox other);
     Sides GetSidesColliding(Hitbox other);
+
+    void SetPrevPos() override;
 
     void Move(Vector2 amount) override;
     void SetPos(Vector2 pos) override;
@@ -77,9 +84,12 @@ public:
     Color GetDebugColour() { return debugColour; }
     void SetDebugColour(Color colour) { debugColour = colour; }
 
-    void Draw() override;
-
+    void Draw(const double alpha) override;
+    
 private:
+    Vector2 prevTopLeft;
+    Vector2 prevBottomRight;
+
     Vector2 topLeft;
     Vector2 bottomRight;
 

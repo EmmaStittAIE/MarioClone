@@ -33,6 +33,12 @@ Sides Hitbox::GetSidesColliding(Hitbox other)
     return sides;
 }
 
+void Hitbox::SetPrevPos()
+{
+    prevTopLeft = topLeft;
+    prevBottomRight = bottomRight;
+}
+
 void Hitbox::Move(Vector2 amount)
 {
     topLeft = topLeft + amount;
@@ -78,7 +84,7 @@ void Hitbox::SetScale(Vector2 newSize, Alignment align)
     }
 }
 
-void Hitbox::Draw()
+void Hitbox::Draw(const double alpha)
 {
-    DrawRectangle(GetLeft(), GetTop(), GetWidth(), GetHeight(), debugColour);
+    DrawRectangle((GetLeft() * alpha) + (GetPrevLeft() * (1.0 - alpha)), (GetTop() * alpha) + (GetPrevTop() * (1.0 - alpha)), GetWidth(), GetHeight(), debugColour);
 }

@@ -47,7 +47,7 @@ void Sprite::AdvanceAnimation()
     }
 }
 
-void Sprite::Draw()
+void Sprite::Draw(const double alpha)
 {
     if (spritesheet == nullptr) { throw NotInitialisedException(); }
 
@@ -63,7 +63,7 @@ void Sprite::Draw()
 
     Rectangle sourceRect = currentAnim->frames[currentAnim->currentFrame];
     sourceRect.width *= facingRight ? 1 : -1;
-    DrawTexturePro(colouredTexture, sourceRect, { 0, 0, 64, 64 }, -position, 0, WHITE);
+    DrawTexturePro(colouredTexture, sourceRect, { 0, 0, 64, 64 }, -((position * alpha) + (previousPos * (1.0 - alpha))), 0, WHITE);
 }
 
 void Sprite::RenderingUpdate()

@@ -44,6 +44,7 @@ private:
     // timing
     double accumulator = 0;
     double frameTime = 0;
+    double alpha;
 
     double t = 0.0;
     const double dt = 1.0/60.0;

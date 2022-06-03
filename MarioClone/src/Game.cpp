@@ -66,6 +66,8 @@ void Game::Update()
         t += dt;
         accumulator -= dt;
     }
+
+    alpha = accumulator / dt;
 }
 
 void Game::Draw()
@@ -83,7 +85,7 @@ void Game::Draw()
     // draw all nodes
     for (int i = 0; i < numOfNodes; i++)
     {
-        nodes[i]->DrawNode();
+        nodes[i]->DrawNode(alpha);
     }
 
     EndDrawing();

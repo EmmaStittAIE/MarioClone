@@ -10,6 +10,8 @@ inline Vector2 operator+(const Vector2& a, const Vector2& b) { return Vector2Add
 
 inline Vector2& operator+=(Vector2& a, const Vector2& b) {a = a + b;  return a; }
 
+inline Vector2 operator-(Vector2 a) { return Vector2Negate(a); }
+
 inline Vector2 operator-(Vector2& a) { return Vector2Negate(a); }
 
 inline Vector2 operator-(const Vector2& a, const Vector2& b) { return Vector2Subtract(a, b); }

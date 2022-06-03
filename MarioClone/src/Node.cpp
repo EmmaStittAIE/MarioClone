@@ -41,6 +41,8 @@ bool Node::AddChild(Node* node)
 
 void Node::PUpdate(float delta)
 {
+    SetPrevPos();
+
     // stuff to do for every node
     PhysicsUpdate(delta);
     for (int i = 0; i < numOfChildren; i++)
@@ -59,14 +61,19 @@ void Node::RUpdate()
     }
 }
 
-void Node::DrawNode()
+void Node::DrawNode(const double alpha)
 {
     // stuff to do for every node
-    Draw();
+    Draw(alpha);
     for (int i = 0; i < numOfChildren; i++)
     {
-        children[i]->Draw();
+        children[i]->Draw(alpha);
     }
+}
+
+void Node::SetPrevPos()
+{
+    previousPos = position;
 }
 
 void Node::SetPos(Vector2 pos)

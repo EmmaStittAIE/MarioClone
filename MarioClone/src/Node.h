@@ -14,9 +14,11 @@ public:
 
     void PUpdate(float delta);
     void RUpdate();
-    void DrawNode();
+    void DrawNode(const double alpha);
 
     virtual void HandleCollision(class Hitbox& thisBox, Hitbox& collision) {}
+
+    virtual void SetPrevPos();
 
     virtual void SetPos(Vector2 pos);
     void SetPos(float x, float y) { SetPos({ x, y }); }
@@ -41,8 +43,9 @@ protected:
 
     virtual void PhysicsUpdate(float delta) { }
     virtual void RenderingUpdate() { }
-    virtual void Draw() {}
+    virtual void Draw(const double alpha) {}
 
+    Vector2 previousPos = { 0, 0 };
     Vector2 position = { 0, 0 };
 
     // used to keep track of which node is which in the nodes array in Game.h

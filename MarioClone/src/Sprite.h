@@ -31,7 +31,7 @@ public:
     Sprite(Game* gamePointer, class Texture* spritesheetPointer);
     Sprite(Game* gamePointer, class GameObject* parentPointer, class Texture* spritesheetPointer);
     void AdvanceAnimation();
-    void Draw() override;
+    void Draw(const double alpha) override;
 
     void SetAnimation(int index) { framesPassed = 0; currentAnim->currentFrame = 0; currentAnim = &animations[index]; currentAnimIndex = index; }
     void SetFacingRight(bool right) { facingRight = right; }
