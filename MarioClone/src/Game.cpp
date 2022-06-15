@@ -1,6 +1,6 @@
 #include "Game.h"
 
-// timekeeping code courtesy of https://stackoverflow.com/a/59446610
+// timekeeping code courtesy of https://gafferongames.com/post/fix_your_timestep/
 
 Game::Game()
 {
@@ -9,34 +9,11 @@ Game::Game()
         nodes[i] = nullptr;
     }
 
-    (new Hitbox(this, { 0.0f, 800.0f, 600.0f, 1000.0f }))->SetDebugColour({ 0, 255, 0, 120 });
-    (new Hitbox(this, { 610.0f, 600.0f, 700.0f, 1000.0f }))->SetDebugColour({ 0, 255, 0, 120 });
+    (new Hitbox(this, { 0.0f, 700.0f, 900.0f, 64.0f }))->SetDebugColour({ 0, 255, 0, 120 });
+    (new Hitbox(this, { 700.0f, 500.0f, 700.0f, 64.0f }))->SetDebugColour({ 0, 255, 0, 120 });
+    (new Hitbox(this, { 0.0f, 300.0f, 200.0f, 64.0f }))->SetDebugColour({ 0, 255, 0, 120 });
+    (new Hitbox(this, { 0.0f, 500.0f, 400.0f, 64.0f }))->SetDebugColour({ 0, 255, 0, 120 });
     new Entity(this, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    /*new Entity(this, nullptr, &spritesheets.playerSpritesheet, {0, 0, 64, 64});
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });
-    new Entity(this, nullptr, &spritesheets.playerSpritesheet, { 0, 0, 64, 64 });*/
 }
 
 void Game::InitGame()
@@ -58,9 +35,11 @@ void Game::Update()
         // do stuff here
         for (int i = 0; i < numOfNodes; i++)
         {
+            nodes[i]->SetPrevPosAll();
             nodes[i]->PUpdate(dt);
         }
         Collisions();
+        
         // end of stuff
 
         t += dt;

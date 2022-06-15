@@ -29,14 +29,12 @@ protected:
     void PhysicsUpdate(float delta) override;
 
 private:
-    Vector2 previousPos = position;
-
     Vector2 velocity = {0, 0};
     Vector2 maxWalkSpeed = { 7, 20 };
     Vector2 maxRunSpeed = { 10, 20 };
 
-    float walkVelocity = 30;
-    float runVelocity = 40;
+    float walkAccel = 30;
+    float runAccel = 40;
 
     float gravity = 50;
     float friction = 10;

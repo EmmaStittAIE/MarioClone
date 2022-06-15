@@ -2,8 +2,6 @@
 
 void Entity::PhysicsUpdate(float delta)
 {
-    previousPos = position;
-
     if (velocity.x > 0.4 || velocity.x < -0.4)
     {
         if ((velocity.x > 0 && !sprite->GetFacingRight()) || (velocity.x < 0 && sprite->GetFacingRight())) { sprite->SetAnimation(2); }
@@ -58,12 +56,12 @@ void Entity::HandleInput(float delta)
 {
     if (IsKeyDown(KEY_LEFT))
     {
-        AddForce(-(running ? runVelocity : walkVelocity), 0, delta);
+        AddForce(-(running ? runAccel : walkAccel), 0, delta);
         if (onFloor) { sprite->SetFacingRight(false); }
     }
     if (IsKeyDown(KEY_RIGHT))
     {
-        AddForce((running ? runVelocity : walkVelocity), 0, delta);
+        AddForce((running ? runAccel : walkAccel), 0, delta);
         if (onFloor) { sprite->SetFacingRight(true); }
     }
     if (IsKeyPressed(KEY_Z))
@@ -88,6 +86,11 @@ void Entity::HandleCollision(Hitbox& thisBox, Hitbox& collision)
             SetPos(position.x, collision.GetTop() - thisBox.GetHeight());
             velocity.y = 0;
             onFloor = true;
+        }
+        else if ((entitySides & Sides::top) == Sides::top)
+        {
+            SetPos(position.x, collision.GetBottom());
+            velocity.y = 0;
         }
 
         entitySides = hitbox->GetSidesColliding(collision);

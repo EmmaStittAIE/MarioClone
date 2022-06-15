@@ -26,10 +26,11 @@ Sides Hitbox::GetSidesColliding(Hitbox other)
 {
     Sides sides = static_cast<Sides>(0);
     
-    if (GetLeft() < other.GetRight() && GetRight() > other.GetRight()) { sides |= Sides::left; }
-    if (GetRight() > other.GetLeft() && GetLeft() < other.GetLeft()) { sides |= Sides::right; }
-    if (GetTop() < other.GetBottom() && GetBottom() > other.GetBottom()) { sides |= Sides::top; }
-    if (GetBottom() > other.GetTop() && GetTop() < other.GetTop()) { sides |= Sides::bottom; }
+    if (GetPrevBottom() <= other.GetPrevTop() && GetBottom() >= other.GetTop()) { sides |= Sides::bottom; }
+    if (GetPrevTop() >= other.GetPrevBottom() && GetTop() <= other.GetBottom()) { sides |= Sides::top; }
+    if (GetPrevRight() <= other.GetPrevLeft() && GetRight() >= other.GetLeft()) { sides |= Sides::right; }
+    if (GetPrevLeft() >= other.GetPrevRight() && GetLeft() <= other.GetRight()) { sides |= Sides::left; }
+
     return sides;
 }
 

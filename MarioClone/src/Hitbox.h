@@ -51,6 +51,7 @@ public:
         : Hitbox(gamePointer, parentPointer, { pos.x, pos.y, size.x, size.y }) {}
 
     Vector2 GetPos() override { return topLeft; }
+    Vector2 GetPrevPos() override { return prevTopLeft; }
 
     Vector2 GetTopLeft() { return topLeft; }
     Vector2 GetTopRight() { return { bottomRight.x, topLeft.y }; }

@@ -1,6 +1,6 @@
 #pragma once
 
-// timekeeping code courtesy of https://stackoverflow.com/a/59446610
+// timekeeping code courtesy of https://gafferongames.com/post/fix_your_timestep/
 
 #include <string>
 #include <chrono>
@@ -43,7 +43,7 @@ private:
     // timing
     double accumulator = 0;
     double frameTime = 0;
-    double alpha;
+    double alpha = 0;
 
     double t = 0.0;
     const double dt = 1.0/60.0;

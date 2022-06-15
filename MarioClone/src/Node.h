@@ -18,7 +18,7 @@ public:
 
     virtual void HandleCollision(class Hitbox& thisBox, Hitbox& collision) {}
 
-    virtual void SetPrevPos();
+    virtual void SetPrevPosAll();
 
     virtual void SetPos(Vector2 pos);
     void SetPos(float x, float y) { SetPos({ x, y }); }
@@ -30,6 +30,7 @@ public:
     Node** GetChildren() { return children; }
     int GetNumOfChildren() { return numOfChildren; }
     virtual Vector2 GetPos() { return position; }
+    virtual Vector2 GetPrevPos() { return previousPos; }
     int GetIndex() { return nodeIndex; }
     bool IsInitialised() { return isInitialised; }
 
@@ -43,6 +44,7 @@ protected:
 
     virtual void PhysicsUpdate(float delta) { }
     virtual void RenderingUpdate() { }
+    virtual void SetPrevPos() { previousPos = position; }
     virtual void Draw(const double alpha) {}
 
     Vector2 previousPos = { 0, 0 };

@@ -4,7 +4,7 @@ int main()
 {
     Game game;
 
-    InitWindow(1024, 960, "Superb Run 'n' Jump Man");
+    InitWindow(1024, 960, "Superb Run 'n' Jump Sibling");
 
     game.InitGame();
 
